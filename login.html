@@ -1,18 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LOGIN</title>
-  </head>
-  <body>
-    <h1>Login</h1>
-    <form>
-      ID : <input type="text" />
-      <br />
-      PW : <input type="password" />
-      <br />
-      <input type="button" value="login" />
-    </form>
-  </body>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="login.css" />
+  <title>Login</title>
+</head>
+<body>
+<h1>Login</h1>
+<form>
+  ID : <input id="txt_id" class="login_inputs" type="text" />
+  <br />
+  PW : <input class="login_inputs" type="password" />
+  <br />
+  <input id="btn_login" type="button" value="login" onclick="popId()" />
+</form>
+
+<script>
+  const popId = () => {
+    const id = document.getElementById("txt_id").value;
+
+    if (!id) {
+      alert("아이디를 입력해주세요.");
+    } else {
+      alert(id);
+    }
+  };
+
+  const myFunction = () => {
+    alert("1");
+    alert("2");
+    alert("3");
+  };
+</script>
+</body>
 </html>

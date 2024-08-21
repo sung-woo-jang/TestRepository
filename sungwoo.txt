@@ -1,3 +1,0 @@
-hello
-push test
-origin edit test
