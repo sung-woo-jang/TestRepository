@@ -1,3 +1,4 @@
+/*
 const fs = require('fs');
 const main_view = fs.readFileSync('./main.html');
 const orderlist_view = fs.readFileSync('./orderlist.html');
@@ -77,9 +78,28 @@ handle['/'] = main;
 handle['/order'] = order;
 handle['/orderlist'] = orderlist;
 
-/* image directory */
+/!* image directory *!/
 handle['/img/redRacket.png'] = redRacket;
 handle['/img/blueRacket.png'] = blueRacket;
 handle['/img/blackRacket.png'] = blackRacket;
+
+exports.handle = handle;*/
+
+function main() {
+  console.log('main');
+}
+
+function login() {
+  console.log('login');
+}
+
+function favicon() {
+  console.log('favicon.ico');
+}
+
+let handle = {};
+handle['/'] = main;
+handle['/login'] = login;
+handle['/favicon.ico'] = favicon;
 
 exports.handle = handle;
