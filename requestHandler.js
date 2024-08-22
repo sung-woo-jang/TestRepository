@@ -85,16 +85,28 @@ handle['/img/blackRacket.png'] = blackRacket;
 
 exports.handle = handle;*/
 
-function main() {
+function main(response) {
   console.log('main');
+
+  response.writeHead(200, { 'Content-Type': 'text/html' });
+  response.write('Main page');
+  response.end();
 }
 
-function login() {
+function login(response) {
   console.log('login');
+
+  response.writeHead(200, { 'Content-Type': 'text/html' });
+  response.write('Login page');
+  response.end();
 }
 
-function favicon() {
+function favicon(response) {
   console.log('favicon.ico');
+
+  response.writeHead(200, { 'Content-Type': 'text/html' });
+  response.write('favicon.ico');
+  response.end();
 }
 
 let handle = {};
