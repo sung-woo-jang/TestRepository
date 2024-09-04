@@ -1,9 +1,14 @@
-const http = require("http");
+const express = require('express');
+const app = express();
+const port = 1234;
 
-const onRequest = (req, res) => {
-  res.writeHead(200, { "Content-type": "text/html" });
-  res.write("Hello Node.js");
-  res.end();
-};
+app.get('/2', (req, res) => {
+  res.json({
+    productName: 'Cup',
+    price: 3000,
+  });
+});
 
-http.createServer(onRequest).listen(8888);
+app.listen(port, () => {
+  console.log(`서버가 http://localhost:${port} 에서 실행 중입니다.`);
+});
