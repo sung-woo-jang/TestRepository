@@ -2,5 +2,8 @@
   "dependencies": {
     "express": "^4.19.2",
     "figlet": "^1.7.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3"
   }
 }
