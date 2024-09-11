@@ -1,50 +1,109 @@
+// express 모듈셋팅
 const express = require('express');
 const app = express();
-app.use(express.json());
 app.listen(7777);
+app.use(express.json());
 
-const db = new Map();
-let id = 1;
+const users = [];
 
-// 로그인
-app.post('/login', (req, res) => {});
+// idCheck
+const idCheck = (obj, id) => {
+  let loginUser = {};
+  obj.map((user, idx) => {
+    if (user.id === id) {
+      loginUser = { ...user, idx };
+    }
+  });
+  return loginUser;
+};
 
-// 회원가입
-app.post('/join', (req, res) => {
-  if (req.body?.name) {
-    db.set(id++, req.body);
-
-    res.json({
-      message: `${req.body.name}님 환영합니다.`,
+// pwdCheck
+const pwdCheck = (obj, pwd, res) => {
+  if (obj.pwd === pwd) {
+    res.status(200).json({
+      message: `${obj.id}님 환영합니다.`,
     });
   } else {
     res.status(400).json({
-      message: '입력 값을 확인해주세요.',
+      message: `pw아이디나 비밀번호를 다시 확인해주세요.`,
+    });
+  }
+};
+
+// 로그인
+app.post('/login', (req, res) => {
+  const { id, pwd } = req.body;
+  const loginUser = idCheck(users, id);
+  const userCheck = Object.keys(loginUser);
+
+  if (userCheck.length > 0) {
+    pwdCheck(loginUser, pwd, res);
+  } else {
+    res.status(400).json({
+      message: `id아이디나 비밀번호를 다시 확인해주세요.`,
     });
   }
 });
 
+// 회원가입
+app.post('/join', (req, res) => {
+  const { id, pwd, name } = req.body;
+  const key = users.filter((user) => user.id === id);
+  const bodyKeyCheck = Object.keys(req.body).length;
+  if (bodyKeyCheck > 0) {
+    if (key.length === 0) {
+      users.push({ id, pwd, name });
+      res.status(201).json({
+        message: `${id}님 가입을 환영합니다.`,
+      });
+    } else {
+      res.status(409).json({
+        message: `이미 존재하는 아이디입니다.`,
+      });
+    }
+  } else {
+    res.status(400).json({
+      message: `입력 값을 다시 확인해주세요.`,
+    });
+  }
+});
+
+// route 맛보기
 app
   .route('/users/:id')
+  // 회원개별조회
   .get((req, res) => {
-    const id = parseInt(req.params.id);
-    const user = db.get(id);
-
-    if (!user) {
-      res.status(404).json({ message: '유저 정보를 찾을 수 없습니다.' });
+    const { id } = req.params;
+    if (users.length === 0) {
+      res.status(500).json({
+        message: `회원이 존재하지 않습니다.`,
+      });
+      return;
     }
-
-    res.json({ userId: user.userId, name: user.name });
+    const loginUser = idCheck(users, id);
+    const userCheck = Object.keys(loginUser);
+    if (userCheck.length > 0) {
+      res.status(200).json({ id: loginUser.id, name: loginUser.name });
+    } else {
+      res.status(404).json({
+        message: `존재하지 않는 계정입니다.`,
+      });
+    }
   })
+  // 회원개별탈퇴
   .delete((req, res) => {
-    const id = parseInt(req.params.id);
-    const user = db.get(id);
+    const { id } = req.params;
+    const loginUser = idCheck(users, id);
+    const userCheck = Object.keys(loginUser);
 
-    if (!user) {
-      res.status(404).json({ message: '유저 정보를 찾을 수 없습니다.' });
+    if (userCheck.length > 0) {
+      users.splice(loginUser.idx, 1);
+      res.status(200).json({
+        message: `${id}님의 계정이 탈퇴되었습니다.`,
+      });
+    } else {
+      res.status(404).json({
+        message: `존재하지 않는 계정입니다.`,
+      });
     }
-
-    db.delete(id);
-
-    res.json({ message: `${user.name}님 다음에 또 뵙겠습니다` });
   });
