@@ -1,10 +1,12 @@
-const express = require('express');
+const express = require("express");
+const route = express.Router();
 const app = express();
-app.listen(7777);
+const channelRouter = require("./routes/channels");
+const userRouter = require("./routes/users");
+
 app.use(express.json());
 
-const usersRouter = require('./routes/users');
-const channelsRouter = require('./routes/channels');
+app.use("/", userRouter);
+app.use("/channels", channelRouter);
 
-app.use('/', usersRouter);
-app.use('/channels/', channelsRouter);
+app.listen(7777);
